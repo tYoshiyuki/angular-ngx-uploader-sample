@@ -1,0 +1,46 @@
+<div
+  class="drop-container"
+  ngFileDrop
+  [options]="options"
+  (uploadOutput)="onUploadOutput($event)"
+  [uploadInput]="uploadInput"
+  [ngClass]="{ 'is-drop-over': dragOver }"
+>
+  <h1>Drag &amp; Drop</h1>
+
+  <input
+    type="file"
+    ngFileSelect
+    [options]="options"
+    (uploadOutput)="onUploadOutput($event)"
+    [uploadInput]="uploadInput"
+    multiple
+  >
+  <button mat-raised-button color="accent">or choose file(s)</button>
+</div>
+
+<div class="button-container">
+  <button mat-raised-button color="primary" type="button" class="start-upload-btn" (click)="startUpload()">
+    Start Upload
+  </button>
+</div>
+
+<div class="debug-container">
+  <ng-container *ngFor="let file of files">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{file.name}}</mat-card-title>
+        <mat-card-subtitle>size: {{humanizeBytes(file.size)}} / progress: {{file.progress.data?.percentage}} %</mat-card-subtitle>
+      </mat-card-header>
+      <mat-progress-bar mode="determinate" value="{{file.progress.data?.percentage}}"></mat-progress-bar>
+      <mat-card-content>
+        {{file | json}}
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-fab color="primary" (click)="removeFile(file.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+</div>
