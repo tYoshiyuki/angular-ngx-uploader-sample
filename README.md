@@ -1,6 +1,17 @@
-# AngularNgxUploaderSample
+# angular-ngx-uploader-sample
+Angular の ngx-uploader の実装サンプルです
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.4.
+# Feature
+- Angular11
+- Angular Material
+- ngx-uploader
+
+# Note
+- アップロード用モックサーバを起動するには、下記コマンドを実行します。
+
+```sh
+node mock/server.js
+```
 
 ## Development server
 

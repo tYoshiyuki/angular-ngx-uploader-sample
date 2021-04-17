@@ -23,9 +23,12 @@ export class AppComponent {
   // UploadOutputイベントの結果に応じて、ファイル情報を変動させる必要があります。
   files: UploadFile[] = [];
 
+  /**
+   * ngx-uploader へイベントを発火するための EventEmitter です。
+   */
   uploadInput: EventEmitter<UploadInput> = new EventEmitter<UploadInput>();
-  humanizeBytes: Function = humanizeBytes;
-  dragOver: boolean = false;
+  humanizeBytes = humanizeBytes;
+  dragOver = false;
 
   private uploadInputEvent: UploadInput = {
     type: 'uploadAll',
@@ -33,8 +36,14 @@ export class AppComponent {
     method: 'POST',
   };
 
-  constructor() {}
+  constructor() {
+  }
 
+  /**
+   * ngx-uploader からのイベントをハンドリングする関数です。
+   *
+   * @param output
+   */
   onUploadOutput(output: UploadOutput): void {
     switch (output.type) {
       case 'allAddedToQueue':
@@ -52,7 +61,7 @@ export class AppComponent {
         console.log(
           `${output.file?.name} : ${
             output.file?.progress.data?.percentage
-          }% : ${humanizeBytes(output.file?.size ?? 0)}`
+          }% : ${humanizeBytes(output.file?.size ?? 0)}`,
         );
 
         if (typeof output.file !== 'undefined') {
@@ -101,11 +110,11 @@ export class AppComponent {
   }
 
   cancelUpload(id: string): void {
-    this.uploadInput.emit({ type: 'cancel', id: id });
+    this.uploadInput.emit({ type: 'cancel', id });
   }
 
   removeFile(id: string): void {
-    this.uploadInput.emit({ type: 'remove', id: id });
+    this.uploadInput.emit({ type: 'remove', id });
     this.files = this.files.filter((file: UploadFile) => file.id !== id);
   }
 
