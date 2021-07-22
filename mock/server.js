@@ -11,6 +11,7 @@ server.use(middlewares);
 // ファイルアップロード用のモックエンドポイントです
 server.post('/upload', upload.any(), (req, res) => {
   console.log(req.files);
+  console.log(req.headers);
   res.status(200).end();
 });
 

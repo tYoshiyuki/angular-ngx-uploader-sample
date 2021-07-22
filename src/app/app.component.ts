@@ -13,8 +13,6 @@ import {
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
-  title = 'angular-ngx-uploader-sample';
-
   options: UploaderOptions = {} as UploaderOptions;
   // ファイルアップロード時の制約を行いたい場合は、設定出来ます。
   // options: UploaderOptions = = { concurrency: 1, maxUploads: 3, maxFileSize: 100000000 } as UploaderOptions;
@@ -34,6 +32,9 @@ export class AppComponent {
     type: 'uploadAll',
     url: 'http://localhost:3000/upload',
     method: 'POST',
+    // トークン認証を行いたい場合に設定します。
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    headers: { 'Authorization': 'JWT token' },
   };
 
   constructor() {
@@ -82,6 +83,10 @@ export class AppComponent {
         this.dragOver = false;
         break;
       case 'done':
+        // @todo エラー処理の実装が必要です。
+        if (output.file?.responseStatus === 400) {
+          console.log(output.file.response);
+        }
         break;
     }
   }
