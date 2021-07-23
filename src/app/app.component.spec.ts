@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { UploadFile } from 'ngx-uploader';
+import { UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -35,7 +35,7 @@ describe('AppComponent', () => {
         method: 'POST',
         // eslint-disable-next-line @typescript-eslint/naming-convention
         headers: { 'Authorization': 'JWT token' },
-      };
+      } as UploadInput;
 
       // Act
       app.startUpload();
@@ -52,7 +52,7 @@ describe('AppComponent', () => {
       const app = fixture.componentInstance;
       spyOn((app as any).uploadInput, 'emit');
 
-      const eventArgs = { type: 'cancel', id: "1" };
+      const eventArgs = { type: 'cancel', id: "1" } as UploadInput;
 
       // Act
       app.cancelUpload("1");
@@ -70,7 +70,7 @@ describe('AppComponent', () => {
       app.files.push({ id: "1" } as UploadFile);
       spyOn((app as any).uploadInput, 'emit');
 
-      const eventArgs = { type: 'remove', id: "1" };
+      const eventArgs = { type: 'remove', id: "1" } as UploadInput;
 
       // Act
       app.removeFile("1");
@@ -88,7 +88,7 @@ describe('AppComponent', () => {
       const app = fixture.componentInstance;
       spyOn((app as any).uploadInput, 'emit');
 
-      const eventArgs = { type: 'removeAll' };
+      const eventArgs = { type: 'removeAll' } as UploadInput;
 
       // Act
       app.removeAllFiles();
@@ -98,4 +98,64 @@ describe('AppComponent', () => {
     });
   });
 
+  describe('onUploadOutput', () => {
+    // @todo allAddedToQueue
+    // @todo removed
+    // @todo dragOver
+    // @todo dragOut
+    // @todo drop
+    // @todo done
+
+    describe('addedToQueue', () => {
+      it('正常実行出来ること。', () => {
+        // Arrange
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.componentInstance;
+
+        const eventArgs = {
+          type: 'addedToQueue',
+          file: {
+            id: "1"
+          }
+        } as UploadOutput;
+
+        // Act
+        app.onUploadOutput(eventArgs);
+
+        // Assert
+        expect(app.files.length).toBe(1);
+      });
+    });
+
+    describe('uploading', () => {
+      it('正常実行出来ること。', () => {
+        // Arrange
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.componentInstance;
+        app.files.push({ id: "1", size: 0 } as UploadFile);
+
+        const eventArgs = {
+          type: 'uploading',
+          file: {
+            id: "1",
+            size: 100,
+            progress: {
+              data: {
+                percentage: 10
+              }
+            }
+          }
+        } as UploadOutput;
+
+        // Act
+        app.onUploadOutput(eventArgs);
+
+        // Assert
+        expect(app.files.length).toBe(1);
+        expect(app.files[0].size).toBe(100);
+        expect(app.files[0].progress.data?.percentage).toBe(10);
+      });
+    });
+
+  });
 });
