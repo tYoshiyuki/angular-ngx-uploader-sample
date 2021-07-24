@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -11,13 +11,16 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
+  let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.componentInstance;
+    fixture.detectChanges();
+  })
+
   it('初期化出来ること。', () => {
-    // Arrange
-    const fixture = TestBed.createComponent(AppComponent);
-
-    // Act
-    const app = fixture.componentInstance;
-
     // Assert
     expect(app).toBeTruthy();
   });
@@ -25,8 +28,6 @@ describe('AppComponent', () => {
   describe('onStartUpload', () => {
     it('正常実行出来ること。', () => {
       // Arrange
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.componentInstance;
       spyOn((app as any).uploadInput, 'emit');
 
       const uploadInputEvent = {
@@ -48,8 +49,6 @@ describe('AppComponent', () => {
   describe('cancelUpload', () => {
     it('正常実行出来ること。', () => {
       // Arrange
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.componentInstance;
       spyOn((app as any).uploadInput, 'emit');
 
       const eventArgs = { type: 'cancel', id: "1" } as UploadInput;
@@ -65,8 +64,6 @@ describe('AppComponent', () => {
   describe('removeFile', () => {
     it('正常実行出来ること。', () => {
       // Arrange
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.componentInstance;
       app.files.push({ id: "1" } as UploadFile);
       spyOn((app as any).uploadInput, 'emit');
 
@@ -84,10 +81,7 @@ describe('AppComponent', () => {
   describe('removeAllFiles', () => {
     it('正常実行出来ること。', () => {
       // Arrange
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.componentInstance;
       spyOn((app as any).uploadInput, 'emit');
-
       const eventArgs = { type: 'removeAll' } as UploadInput;
 
       // Act
@@ -109,9 +103,6 @@ describe('AppComponent', () => {
     describe('addedToQueue', () => {
       it('正常実行出来ること。', () => {
         // Arrange
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.componentInstance;
-
         const eventArgs = {
           type: 'addedToQueue',
           file: {
@@ -130,8 +121,6 @@ describe('AppComponent', () => {
     describe('uploading', () => {
       it('正常実行出来ること。', () => {
         // Arrange
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.componentInstance;
         app.files.push({ id: "1", size: 0 } as UploadFile);
 
         const eventArgs = {
@@ -156,6 +145,5 @@ describe('AppComponent', () => {
         expect(app.files[0].progress.data?.percentage).toBe(10);
       });
     });
-
   });
 });
